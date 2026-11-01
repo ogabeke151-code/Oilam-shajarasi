@@ -1,1 +1,112 @@
 
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oilam shajarasi</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f2f5f8;
+  margin: 0;
+  padding: 20px;
+  text-align: center;
+  color: #263238;
+}
+h1 { color: #174b35; }
+input {
+  padding: 12px;
+  margin: 5px;
+  border: 1px solid #bbb;
+  border-radius: 8px;
+  width: 80%;
+  max-width: 300px;
+}
+button {
+  padding: 12px 20px;
+  background: #176b48;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  margin: 8px;
+}
+.person {
+  background: white;
+  padding: 15px;
+  margin: 12px auto;
+  max-width: 350px;
+  border-radius: 12px;
+  box-shadow: 0 2px 7px #ccc;
+}
+.person h3 { color: #176b48; }
+</style>
+</head>
+<body>
+
+<h1>🌳 Oilam shajarasi</h1>
+<p>Bizning oilamiz tarixi</p>
+
+<h3>Yangi qarindosh qo‘shish</h3>
+
+<input id="name" placeholder="Ism familiyasi">
+<br>
+<input id="relation" placeholder="Kim bo‘ladi? (Bobo, ota...)">
+<br>
+<input id="parent" placeholder="Otasining ismi">
+<br>
+<button onclick="addPerson()">Qo‘shish</button>
+
+<h2>👨‍👩‍👧‍👦 Oila a'zolari</h2>
+<div id="tree"></div>
+
+<script>
+let people = JSON.parse(localStorage.getItem("family")) || [];
+
+function showPeople() {
+  let tree = document.getElementById("tree");
+  tree.innerHTML = "";
+
+  people.forEach((p, i) => {
+    tree.innerHTML += `
+      <div class="person">
+        <h3>👤 ${p.name}</h3>
+        <p>Qarindoshligi: ${p.relation}</p>
+        <p>Otasi: ${p.parent || "Ko‘rsatilmagan"}</p>
+        <button onclick="deletePerson(${i})">O‘chirish</button>
+      </div>`;
+  });
+}
+
+function addPerson() {
+  let name = document.getElementById("name").value.trim();
+  let relation = document.getElementById("relation").value.trim();
+  let parent = document.getElementById("parent").value.trim();
+
+  if (!name || !relation) {
+    alert("Ism va qarindoshlikni kiriting!");
+    return;
+  }
+
+  people.push({name, relation, parent});
+  localStorage.setItem("family", JSON.stringify(people));
+
+  document.getElementById("name").value = "";
+  document.getElementById("relation").value = "";
+  document.getElementById("parent").value = "";
+
+  showPeople();
+}
+
+function deletePerson(i) {
+  people.splice(i, 1);
+  localStorage.setItem("family", JSON.stringify(people));
+  showPeople();
+}
+
+showPeople();
+</script>
+
+</body>
+</html>
+
